@@ -1,0 +1,79 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.audio {
+    display: flex;
+    height: 40px;
+    border: 1px solid red;
+    background-color: #000;
+}
+
+.audio__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 5px;
+    border-right: 1px solid red;
+    color: #fff;
+    background-color: #000;
+    cursor: pointer;
+}
+
+.audio__button:hover,
+.audio__button--active {
+    background-color: #fff;
+    color: #000;
+}
+
+.audio__progress {
+    position: relative;
+    height: 100px;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+}
+
+.audio__progress span {
+    display: inline-block;
+    width: 2px;
+    height: 100%;
+    background-color: red;
+    border-radius: 4px;
+}
+
+.audio__progress:before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 1px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    content: "";
+}
+
+.audioAnalyser {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 100px;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.audioAnalyser span {
+    display: inline-block;
+    width: 6px;
+    height: 100%;
+    background-color: red;
+    border-radius: 4px;
+}

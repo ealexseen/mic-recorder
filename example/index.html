@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="main.css" />
+</head>
+<body>
+    <div class="audio__progress" id="audio__progress">
+
+    </div>
+    <div class="audio">
+        <div class="audio__button" id="start">
+            Start
+        </div>
+        <div class="audio__button" id="stop">
+            Stop
+        </div>
+        <div class="audio__button" id="pause">
+            Pause
+        </div>
+        <div class="audio__button" id="download">
+            Download
+        </div>
+        <div class="audio__button" id="listen">
+            Listen
+        </div>
+    </div>
+    <div class="audioAnalyser" id="audioAnalyser"></div>
+
+    <script src="../build/index.js"></script>
+    <script>
+        var start = document.getElementById('start');
+        var stop = document.getElementById('stop');
+        var pause = document.getElementById('pause');
+        var download = document.getElementById('download');
+        var listen = document.getElementById('listen');
+        var audioAnalyser = document.getElementById('audioAnalyser');
+        var audioProgress = document.getElementById('audio__progress');
+        var recorder = new MicRecorder({
+            bitRate: 128,
+            lengthAnalyser: 70,
+        });
+        var test = [];
+
+        recorder.on('start', (data) => {
+            const num = recorder.config.lengthAnalyser;
+
+            for (let i = 0; num > i; i++) {
+                const span = document.createElement('span');
+                audioAnalyser.appendChild(span);
+            }
+        });
+
+        recorder.on('stop', () => {
+            audioAnalyser.innerHTML = '';
+            audioProgress.innerHTML = '';
+        });
+
+        recorder.on('analyser_second', (data) => {
+            const span = document.createElement('span');
+            let height = data[0]*0.7;
+
+            if (height > 100) {
+                height = 100;
+            }
+
+            span.style.height = `${height}px`;
+            span.style.opacity = 0.008 * height;
+
+            audioProgress.appendChild(span);
+        });
+
+        recorder.on('analyser', (data) => {
+            for (let i = 0; recorder.config.lengthAnalyser > i; i++) {
+                const item = audioAnalyser.children[i];
+
+                if (item) {
+                    let height = data[i]*0.5;
+
+                    if (height > 100) {
+                        height = 100;
+                    }
+
+                    item.style.height = `${height}px`;
+                    item.style.opacity = 0.008 * height;
+                }
+            }
+        });
+
+        start.addEventListener('click', async () => {
+            await recorder.start();
+        });
+
+        stop.addEventListener('click', () => {
+            recorder.stop();
+        });
+
+        pause.addEventListener('click', () => {
+            recorder.pause();
+        });
+
+        download.addEventListener('click', async () => {
+            const { url } = await recorder.getFile('mp3');
+
+            recorder.download(url);
+        });
+
+        listen.addEventListener('click', async () => {
+            const { audio } = await recorder.getFile('mp3');
+
+            audio.play();
+        });
+    </script>
+</body>
+</html>
